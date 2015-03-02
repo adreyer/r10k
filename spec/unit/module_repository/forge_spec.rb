@@ -6,7 +6,7 @@ describe R10K::ModuleRepository::Forge do
 
   it "uses the official forge by default" do
     forge = described_class.new
-    expect(forge.forge).to eq 'forge.puppetlabs.com'
+    expect(forge.forge).to eq 'forgeapi.puppetlabs.com'
   end
 
   it "can use a private forge" do

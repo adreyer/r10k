@@ -16,7 +16,11 @@ class R10K::ModuleRepository::Forge
   #   @return [Faraday]
   attr_reader :conn
 
-  def initialize(forge = 'forge.puppetlabs.com')
+  def initialize(forge = 'forgeapi.puppetlabs.com')
+    if forge =~ /forge\.puppetlabs\.com/
+      logger.warn("#{forge} does not support the latest puppet forge API. Please update to \"forge 'https://forgeapi.puppetlabs.com'\"")
+      forge = 'forgeapi.puppetlabs.com'
+    end
     @forge = forge
 
     @conn = Faraday.new(
@@ -42,11 +46,15 @@ class R10K::ModuleRepository::Forge
   # @param module_name [String] The fully qualified module name
   # @return [Array<String>] All published versions of the given module
   def versions(module_name)
-    response = @conn.get("/api/v1/releases.json", {'module' => module_name})
+    response = @conn.get("/v3/modules/#{module_name.tr('/','-')}")
 
-    response.body[module_name].map do |version_info|
-      version_info['version']
+    if response.status != 200
+      raise "couldn't get #{module_name} from forge at /v3/modules/#{module_name.tr('/','-')}."
     end
+
+    response.body['releases'].map do |version_info|
+      version_info['version']
+    end.reverse
   end
 
   # Query for the newest published version of a module
