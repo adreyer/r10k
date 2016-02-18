@@ -21,6 +21,17 @@ module R10K
         provider.blob_at(git_dir, commit_ish, path, git_opts)
       end
 
+      # Get a list of files from a commit sha
+      #
+      # @param git_dir [String] Path to GIT_DIR of the repo to list files from
+      # @commit_ish, [String] Git commit-ish reference to the commit to list
+      # @return [Array<String] An array of files at that commit
+      def list_files(git_dir, commit_ish, opts={})
+        git_opts = filter_opts(opts)
+
+        provider.list_files(git_dir, commit_ish, git_opts)
+      end
+
       # Get a list of all available local branches in the given repo.
       #
       # @param git_dir [String] Path to GIT_DIR of the repo to list the branches of.

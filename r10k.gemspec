@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'puppet_forge', '~> 2.1.1'
   s.add_dependency 'semantic_puppet', '~> 0.1.0'
+  s.add_dependency 'hocon', '~> 0.9.5'
   s.add_dependency 'minitar'
 
   s.add_development_dependency 'rspec', '~> 3.1'
